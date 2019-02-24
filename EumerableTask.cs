@@ -18,8 +18,25 @@ namespace PadawansTask15
         /// </example>
         public IEnumerable<string> GetUppercaseStrings(IEnumerable<string> data)
         {
-            // TODO : Implement GetUppercaseStrings
-            throw new NotImplementedException();
+            if (data == null)
+            {
+                throw new ArgumentNullException();
+            }
+            var result = data.ToList();
+            for (int i = 0; i < result.Count; i++)
+            {
+                if (result[i] == null || result[i] == "")
+                {
+                    continue;
+                }
+                else
+                {
+                    var temp = result[i];
+                    result[i] = null;
+                    result[i] = temp.ToUpper();
+                }
+            }
+            return result;
         }
 
         /// <summary> Transforms an each string from sequence to its length.</summary>
@@ -34,8 +51,24 @@ namespace PadawansTask15
         /// </example>
         public IEnumerable<int> GetStringsLength(IEnumerable<string> data)
         {
-            // TODO : Implement GetStringsLength
-            throw new NotImplementedException();
+            if (data == null)
+            {
+                throw new ArgumentNullException();
+            }
+            var list = data.ToList();
+            var result = new List<int>();
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (list[i] == null || list[i] == "")
+                {
+                    result.Add(0);
+                }
+                else
+                {
+                    result.Add(list[i].Length);
+                }
+            }
+            return result;
         }
 
         /// <summary>Transforms integer sequence to its square sequence, f(x) = x * x. </summary>
@@ -50,8 +83,24 @@ namespace PadawansTask15
         /// </example>
         public IEnumerable<long> GetSquareSequence(IEnumerable<int> data)
         {
-            // TODO : Implement GetSquareSequence
-            throw new NotImplementedException();
+            if (data == null)
+            {
+                throw new ArgumentNullException();
+            }
+            var list = data.ToList();
+            var result = new List<long>();
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (list[i] == 0)
+                {
+                    result.Add(0);
+                }
+                else
+                {
+                    result.Add(list[i] * list[i]);  //можно через метод Select(IEnumerable<TSource>, Func<TSource, TResult>)
+                }
+            }
+            return result;
         }
 
         /// <summary> Filters a string sequence by a prefix value (case insensitive).</summary>
@@ -71,8 +120,36 @@ namespace PadawansTask15
         /// </example>
         public IEnumerable<string> GetPrefixItems(IEnumerable<string> data, string prefix)
         {
-            // TODO : Implement GetPrefixItems
-            throw new NotImplementedException();
+            if (data == null | prefix == null)
+            {
+                throw new ArgumentNullException();
+            }
+            //if (prefix == null)
+            //{
+            //    throw new ArgumentNullException();
+            //}
+            var source = data.ToList();
+            for (int i = 0; i < source.Count; i++)
+            {
+                Console.WriteLine(source[i]);
+                if (source[i] == null || source[i] == "")
+                {
+                    source.Remove(source[i]);
+                }
+            }
+            if (prefix == "")
+            {
+                return source;
+            }
+            var result = new List<string>();
+            for (int i = 0; i < source.Count; i++)
+            {
+                if (source[i].Contains(prefix.ToLower()))
+                {
+                    result.Add(source[i]);
+                }
+            }
+            return result;
         }
 
         /// <summary> Finds the 3 largest numbers from a sequence.</summary>
@@ -89,8 +166,32 @@ namespace PadawansTask15
         /// </example>
         public IEnumerable<int> Get3LargestItems(IEnumerable<int> data)
         {
-            // TODO : Implement Get3LargestItems
-            throw new NotImplementedException();
+            if (data == null)
+            {
+                throw new ArgumentNullException();
+            }
+            var array = data.ToList<int>();
+            var result = new List<int>();
+            if (array.Count == 0)
+            {
+                return array;
+            }
+            array.Sort();  //чекнуть как этот метод сортирует, обязательно!
+            if (array.Count < 3)
+            {
+                for (int i = array.Count - 1; i > -1; i--)
+                {
+                    result.Add(array[i]);
+                }
+            }
+            else
+            {
+                for (int i = array.Count - 1; i > array.Count - 4; i--)
+                {
+                    result.Add(array[i]);
+                }
+            }
+            return result;
         }
 
         /// <summary> Calculates sum of all integers from object array.</summary>
@@ -106,8 +207,20 @@ namespace PadawansTask15
         /// </example>
         public int GetSumOfAllIntegers(object[] data)
         {
-            // TODO : Implement GetSumOfAllIntegers
-            throw new NotImplementedException();
+            if (data == null)
+            {
+                throw new ArgumentNullException();
+            }
+            int result = 0;
+            var array = data.ToString().ToCharArray();
+            foreach (var item in data)
+            {
+                if (item.GetType() == typeof(int))
+                {
+                    result += int.Parse(item.ToString());
+                }
+            }
+            return result;
         }
     }
 }
