@@ -124,29 +124,25 @@ namespace PadawansTask15
             {
                 throw new ArgumentNullException();
             }
-            //if (prefix == null)
-            //{
-            //    throw new ArgumentNullException();
-            //}
             var source = data.ToList();
-            for (int i = 0; i < source.Count; i++)
-            {
-                Console.WriteLine(source[i]);
-                if (source[i] == null || source[i] == "")
-                {
-                    source.Remove(source[i]);
-                }
-            }
-            if (prefix == "")
-            {
-                return source;
-            }
             var result = new List<string>();
             for (int i = 0; i < source.Count; i++)
             {
-                if (source[i].Contains(prefix.ToLower()))
+                if (source[i] == null || source[i].Length == 0)
+                {
+                    continue;
+                }
+                if (prefix.Length == 0)
                 {
                     result.Add(source[i]);
+                    continue;
+                }
+                else if (source[i].ToLower().Contains(prefix.ToLower()))
+                {
+                    if (source[i].ToLower()[0] == prefix.ToLower()[0])
+                    {
+                        result.Add(source[i]);
+                    }
                 }
             }
             return result;
@@ -211,10 +207,26 @@ namespace PadawansTask15
             {
                 throw new ArgumentNullException();
             }
+            int counter = 0;
+            for (int i = 0; i < data.Length; i++)
+            {
+                if (data[i] == null)
+                {
+                    counter++;
+                }
+            }
+            if (counter == data.Length)
+            {
+                return 0;
+            }
             int result = 0;
             var array = data.ToString().ToCharArray();
             foreach (var item in data)
             {
+                if (item == null)
+                {
+                    continue;
+                }
                 if (item.GetType() == typeof(int))
                 {
                     result += int.Parse(item.ToString());
