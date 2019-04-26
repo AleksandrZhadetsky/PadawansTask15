@@ -22,7 +22,9 @@ namespace PadawansTask15
             {
                 throw new ArgumentNullException();
             }
-            var result = data.ToList();
+			foreach(var item in data)
+				yield return item?.ToUpper();
+      /*       var result = data.ToList();
             for (int i = 0; i < result.Count; i++)
             {
                 if (result[i] == null || result[i] == "")
@@ -36,7 +38,7 @@ namespace PadawansTask15
                     result[i] = temp.ToUpper();
                 }
             }
-            return result;
+            return result; */
         }
 
         /// <summary> Transforms an each string from sequence to its length.</summary>
@@ -49,13 +51,18 @@ namespace PadawansTask15
         ///   {"a", "aa", "aaa" } => { 1, 2, 3 }
         ///   {"aa", "bb", "cc", "", "  ", null } => { 2, 2, 2, 0, 2, 0 }
         /// </example>
-        public IEnumerable<int> GetStringsLength(IEnumerable<string> data)
+		public IEnumerable<int> GetStringsLength(IEnumerable<string> data)
         {
             if (data == null)
             {
                 throw new ArgumentNullException();
             }
-            var list = data.ToList();
+			foreach(var item in data)
+			{
+				yield return item == null ? 0 : item.Length;
+            }
+		}
+			/* var list = data.ToList();
             var result = new List<int>();
             for (int i = 0; i < list.Count; i++)
             {
@@ -68,7 +75,7 @@ namespace PadawansTask15
                     result.Add(list[i].Length);
                 }
             }
-            return result;
+            return result; */
         }
 
         /// <summary>Transforms integer sequence to its square sequence, f(x) = x * x. </summary>
@@ -87,20 +94,22 @@ namespace PadawansTask15
             {
                 throw new ArgumentNullException();
             }
-            var list = data.ToList();
-            var result = new List<long>();
-            for (int i = 0; i < list.Count; i++)
-            {
-                if (list[i] == 0)
-                {
-                    result.Add(0);
-                }
-                else
-                {
-                    result.Add(list[i] * list[i]);  //можно через метод Select(IEnumerable<TSource>, Func<TSource, TResult>)
-                }
-            }
-            return result;
+			foreach(var item in data)
+				yield return item * item;
+            // var list = data.ToList();
+            // var result = new List<long>();
+            // for (int i = 0; i < list.Count; i++)
+            // {
+                // if (list[i] == 0)
+                // {
+                    // result.Add(0);
+                // }
+                // else
+                // {
+                    // result.Add(list[i] * list[i]);  //можно через метод Select(IEnumerable<TSource>, Func<TSource, TResult>)
+                // }
+            // }
+            // return result;
         }
 
         /// <summary> Filters a string sequence by a prefix value (case insensitive).</summary>
@@ -120,32 +129,48 @@ namespace PadawansTask15
         /// </example>
         public IEnumerable<string> GetPrefixItems(IEnumerable<string> data, string prefix)
         {
-            if (data == null | prefix == null)
-            {
-                throw new ArgumentNullException();
-            }
-            var source = data.ToList();
-            var result = new List<string>();
-            for (int i = 0; i < source.Count; i++)
-            {
-                if (source[i] == null || source[i].Length == 0)
-                {
-                    continue;
-                }
-                if (prefix.Length == 0)
-                {
-                    result.Add(source[i]);
-                    continue;
-                }
-                else if (source[i].ToLower().Contains(prefix.ToLower()))
-                {
-                    if (source[i].ToLower()[0] == prefix.ToLower()[0])
-                    {
-                        result.Add(source[i]);
-                    }
-                }
-            }
-            return result;
+			if (data == null || prefix == null)
+			{
+				throw new ArgumentNullException();
+			}
+			if(prefix == string.Empty)
+			{
+				foreach(var item in data)
+				{
+					if(!string.IsNullOrEmpty(item))
+						yield return item;
+				}	
+			}
+			else
+			{
+				foreach(var item in data)
+				{
+					if(item != null && item.ToLower().IndexOf(prefix.ToLower()) == 0)
+						yield return item;
+				}
+			}
+            // var source = data.ToList();
+            // var result = new List<string>();
+            // for (int i = 0; i < source.Count; i++)
+            // {
+                // if (source[i] == null || source[i].Length == 0)
+                // {
+                    // continue;
+                // }
+                // if (prefix.Length == 0)
+                // {
+                    // result.Add(source[i]);
+                    // continue;
+                // }
+                // else if (source[i].ToLower().Contains(prefix.ToLower()))
+                // {
+                    // if (source[i].ToLower()[0] == prefix.ToLower()[0])
+                    // {
+                        // result.Add(source[i]);
+                    // }
+                // }
+            // }
+            // return result;
         }
 
         /// <summary> Finds the 3 largest numbers from a sequence.</summary>
@@ -166,30 +191,24 @@ namespace PadawansTask15
             {
                 throw new ArgumentNullException();
             }
-            var array = data.ToList<int>();
-            var result = new List<int>();
-            if (array.Count == 0)
+            if (((ICollection<int>)data).Count == 0)   
             {
-                return array;
+                foreach(var value in data)
+					yield return value;
             }
-            array.Sort();  //чекнуть как этот метод сортирует, обязательно!
-            if (array.Count < 3)
-            {
-                for (int i = array.Count - 1; i > -1; i--)
-                {
-                    result.Add(array[i]);
-                }
-            }
-            else
-            {
-                for (int i = array.Count - 1; i > array.Count - 4; i--)
-                {
-                    result.Add(array[i]);
-                }
-            }
-            return result;
+            var TempArr = data.ToList();
+			TempArr.Sort();
+			if(TempArr.Count >= 3)
+			{
+				for(var i = TempArr.Count - 1; i > TempArr.Count - 4; i--)
+					yield return TempArr[i];
+			}
+			else
+			{
+				for(var i = TempArr.Count - 1; i > -1; i--)
+					yield return TempArr[i];				
+			}
         }
-
         /// <summary> Calculates sum of all integers from object array.</summary>
         /// <param name="data">Source array.</param>
         /// <returns>
@@ -207,32 +226,49 @@ namespace PadawansTask15
             {
                 throw new ArgumentNullException();
             }
-            int counter = 0;
-            for (int i = 0; i < data.Length; i++)
-            {
-                if (data[i] == null)
-                {
-                    counter++;
-                }
-            }
-            if (counter == data.Length)
-            {
-                return 0;
-            }
-            int result = 0;
-            var array = data.ToString().ToCharArray();
-            foreach (var item in data)
-            {
-                if (item == null)
-                {
-                    continue;
-                }
-                if (item.GetType() == typeof(int))
-                {
-                    result += int.Parse(item.ToString());
-                }
-            }
-            return result;
+			bool valid = false;
+			foreach(var item in data)
+			{
+				if(item != null)
+				{
+					valid = true;
+					break;
+				}
+			}		
+			var result = 0;
+			if(valid)
+			{
+				foreach(var item in data)
+					if(item is int)
+						result += item == null ? 0 : (int)item;
+			}
+			return result;
+//            int counter = 0;
+//            for (int i = 0; i < data.Length; i++)
+//            {
+//                if (data[i] == null)
+//                {
+//                    counter++;
+//                }
+//            }
+//            if (counter == data.Length)
+//            {
+//                return 0;
+//            }
+//            int result = 0;
+//            var array = data.ToString().ToCharArray();
+//            foreach (var item in data)
+//            {
+//                if (item == null)
+//                {
+//                    continue;
+//                }
+//                if (item.GetType() == typeof(int))
+//                {
+//                    result += int.Parse(item.ToString());
+//                }
+//            }
+           
         }
     }
 }
